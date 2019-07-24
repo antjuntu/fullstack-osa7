@@ -1,4 +1,8 @@
 import React, { useState } from 'react'
+import {
+  BrowserRouter as Router,
+  Route, Link
+} from 'react-router-dom'
 
 const Menu = () => {
   const padding = {
@@ -6,9 +10,9 @@ const Menu = () => {
   }
   return (
     <div>
-      <a href='#' style={padding}>anecdotes</a>
-      <a href='#' style={padding}>create new</a>
-      <a href='#' style={padding}>about</a>
+      <Link style={padding} to="/">anecdotes</Link>
+      <Link style={padding} to="/create">create new</Link>
+      <Link style={padding} to="/about">about</Link>
     </div>
   )
 }
@@ -36,13 +40,18 @@ const About = () => (
   </div>
 )
 
-const Footer = () => (
-  <div>
-    Anecdote app for <a href='https://courses.helsinki.fi/fi/tkt21009'>Full Stack -sovelluskehitys</a>.
+const Footer = () => {
+  const padding = {
+    paddingTop: 10
+  }
+  return (
+    <div style={padding}>
+      Anecdote app for <a href='https://courses.helsinki.fi/fi/tkt21009'>Full Stack -sovelluskehitys</a>.
 
-    See <a href='https://github.com/fullstack-hy2019/routed-anecdotes/blob/master/src/App.js'>https://github.com/fullstack-hy2019/routed-anecdotes/blob/master/src/App.js</a> for the source code.
-  </div>
-)
+      See <a href='https://github.com/fullstack-hy2019/routed-anecdotes/blob/master/src/App.js'>https://github.com/fullstack-hy2019/routed-anecdotes/blob/master/src/App.js</a> for the source code.
+    </div>
+  )
+}
 
 const CreateNew = (props) => {
   const [content, setContent] = useState('')
@@ -59,6 +68,8 @@ const CreateNew = (props) => {
       votes: 0
     })
   }
+
+  
 
   return (
     <div>
@@ -125,13 +136,23 @@ const App = () => {
   return (
     <div>
       <h1>Software anecdotes</h1>
-      <Menu />
-      <AnecdoteList anecdotes={anecdotes} />
-      <About />
-      <CreateNew addNew={addNew} />
+      <Router>
+        <div>
+          <Menu />
+          <Route exact path="/" 
+            render={() => <AnecdoteList anecdotes={anecdotes} />}
+          />
+          <Route path="/about"
+            render={() => <About />}
+          />
+          <Route path="/create"
+            render={() => <CreateNew addNew={addNew} />}
+          />
+        </div>
+      </Router>
       <Footer />
     </div>
   )
 }
 
-export default App;
+export default App
