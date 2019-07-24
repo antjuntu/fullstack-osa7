@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import {
   BrowserRouter as Router,
-  Route, Link
+  Route, Link, withRouter
 } from 'react-router-dom'
 
 const Menu = () => {
@@ -14,6 +14,15 @@ const Menu = () => {
       <Link style={padding} to="/create">create new</Link>
       <Link style={padding} to="/about">about</Link>
     </div>
+  )
+}
+
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+  return (
+    <div>{message}</div>
   )
 }
 
@@ -31,6 +40,7 @@ const AnecdoteList = ({ anecdotes }) => (
 )
 
 const Anecdote = ({ anecdote }) => {
+  console.log(anecdote)
   return (
     <div>
       <h2>{anecdote.content} by {anecdote.author}</h2>
@@ -67,11 +77,10 @@ const Footer = () => {
   )
 }
 
-const CreateNew = (props) => {
+let CreateNew = (props) => {
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
-
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -81,9 +90,8 @@ const CreateNew = (props) => {
       info,
       votes: 0
     })
+    props.history.push('/')
   }
-
-  
 
   return (
     <div>
@@ -108,6 +116,8 @@ const CreateNew = (props) => {
 
 }
 
+CreateNew = withRouter(CreateNew)
+
 const App = () => {
   const [anecdotes, setAnecdotes] = useState([
     {
@@ -126,11 +136,15 @@ const App = () => {
     }
   ])
 
-  const [notification, setNotification] = useState('')
+  const [notification, setNotification] = useState(null)
 
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
     setAnecdotes(anecdotes.concat(anecdote))
+    setNotification(`a new anecdote ${anecdote.content} created!`)
+    setTimeout(() => {
+      setNotification(null)
+    }, 10000)
   }
 
   const anecdoteById = (id) =>
@@ -153,6 +167,7 @@ const App = () => {
       <Router>
         <div>
           <Menu />
+          <Notification message={notification} />
           <Route exact path="/" 
             render={() => <AnecdoteList anecdotes={anecdotes} />}
           />
