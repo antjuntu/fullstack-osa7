@@ -1,0 +1,9 @@
+PUT http://localhost:3001/api/blogs/5d4abc8d6abb793a042ba5d8
+Content-Type: application/json
+
+{
+  "title": "Uusi blogi 7.8.2019",
+  "author": "Ghost Writer",
+  "url": "https://www.oulu.fi",
+  "likes": 77
+}

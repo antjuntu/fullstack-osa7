@@ -1,0 +1,9 @@
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJpZCI6IjVkNGFiNjM5Y2NhYTVjMWRhMDFlNDc2ZiIsImlhdCI6MTU2NTE3ODA3N30.B4AajGd8ttI3WqDP-PHHKooEQ3F0fV3pMx2a13yUDg8
+
+{
+  "title": "Title: likes missing",
+  "author": "Joku",
+  "url": "https://www.testi.fi"
+}
