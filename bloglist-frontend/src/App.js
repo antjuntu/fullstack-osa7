@@ -75,9 +75,9 @@ const App = (props) => {
   const removeBlog = async (blog) => {
     const ok = window.confirm(`remove blog ${blog.title} by ${blog.author}`)
     if (ok) {
-      const updatedBlog = await blogService.remove(blog)
+      await blogService.remove(blog)
       setBlogs(blogs.filter(b => b.id !== blog.id))
-      notify(`blog ${updatedBlog.title} by ${updatedBlog.author} removed!`)
+      notify(`blog ${blog.title} by ${blog.author} removed!`)
     }
   }
 
