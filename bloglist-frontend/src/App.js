@@ -8,19 +8,20 @@ import NewBlog from './components/NewBlog'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import { useField } from './hooks'
-import { setNotification, resetNotification } from './reducers/notificationReducer'
+import { notify } from './reducers/notificationReducer'
+import { initializeBlogs } from './reducers/blogReducer'
 
 const App = (props) => {
   const [username] = useField('text')
   const [password] = useField('password')
-  const [blogs, setBlogs] = useState([])
+  //const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
 
+  // TODO: [props] causes many calls?
   useEffect(() => {
-    blogService.getAll().then(blogs => {
-      setBlogs(blogs)
-    })
-  }, [])
+    props.initializeBlogs()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
@@ -30,11 +31,6 @@ const App = (props) => {
       blogService.setToken(user.token)
     }
   }, [])
-
-  const notify = (message, type = 'success') => {
-    props.setNotification(message, type)
-    setTimeout(() => props.resetNotification(), 10000)
-  }
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -58,26 +54,29 @@ const App = (props) => {
     window.localStorage.removeItem('loggedBlogAppUser')
   }
 
+  // TODO
   const createBlog = async (blog) => {
     const createdBlog = await blogService.create(blog)
     newBlogRef.current.toggleVisibility()
-    setBlogs(blogs.concat(createdBlog))
-    notify(`a new blog ${createdBlog.title} by ${createdBlog.author} added`)
+    //setBlogs(blogs.concat(createdBlog))
+    props.notify(`a new blog ${createdBlog.title} by ${createdBlog.author} added`)
   }
 
+  // TODO
   const likeBlog = async (blog) => {
     const likedBlog = { ...blog, likes: blog.likes + 1 }
     const updatedBlog = await blogService.update(likedBlog)
-    setBlogs(blogs.map(b => b.id === blog.id ? updatedBlog : b))
-    notify(`blog ${updatedBlog.title} by ${updatedBlog.author} liked!`)
+    //setBlogs(blogs.map(b => b.id === blog.id ? updatedBlog : b))
+    props.notify(`blog ${updatedBlog.title} by ${updatedBlog.author} liked!`)
   }
 
+  // TODO
   const removeBlog = async (blog) => {
     const ok = window.confirm(`remove blog ${blog.title} by ${blog.author}`)
     if (ok) {
       await blogService.remove(blog)
-      setBlogs(blogs.filter(b => b.id !== blog.id))
-      notify(`blog ${blog.title} by ${blog.author} removed!`)
+      //setBlogs(blogs.filter(b => b.id !== blog.id))
+      props.notify(`blog ${blog.title} by ${blog.author} removed!`)
     }
   }
 
@@ -120,7 +119,7 @@ const App = (props) => {
         <NewBlog createBlog={createBlog} />
       </Togglable>
 
-      {blogs.sort(byLikes).map(blog =>
+      {props.blogs.sort(byLikes).map(blog =>
         <Blog
           key={blog.id}
           blog={blog}
@@ -134,10 +133,16 @@ const App = (props) => {
   )
 }
 
+const mapStateToProps = (state) => {
+  return {
+    blogs: state.blogs
+  }
+}
+
 export default connect(
-  null,
+  mapStateToProps,
   {
-    setNotification,
-    resetNotification
+    notify,
+    initializeBlogs
   }
 )(App)
