@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
 
-import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
-import NewBlog from './components/NewBlog'
 import Notification from './components/Notification'
-import Togglable from './components/Togglable'
 import { useField } from './hooks'
 import { notify } from './reducers/notificationReducer'
 import { initializeBlogs, createBlog, likeBlog, removeBlog } from './reducers/blogReducer'
 import { toggleVisibility } from './reducers/togglableReducer'
 import { setUser } from './reducers/userReducer'
+import Home from './components/Home'
+import Users from './components/Users'
 
 const App = (props) => {
   const [username] = useField('text')
@@ -76,8 +76,6 @@ const App = (props) => {
     }
   }
 
-  const byLikes = (b1, b2) => b2.likes - b1.likes
-
   if (props.user === null) {
     return (
       <div>
@@ -101,29 +99,29 @@ const App = (props) => {
   }
 
   return (
-    <div>
-      <h2>blogs</h2>
+    <Router>
+      <div>
+        <h2>blogs</h2>
 
-      <Notification />
+        <Notification />
 
-      <p>{props.user.name} logged in</p>
-      <button onClick={handleLogout}>logout</button>
+        <p>{props.user.name} logged in</p>
+        <button onClick={handleLogout}>logout</button>
 
-      <Togglable buttonLabel='create'>
-        <NewBlog handleBlogCreate={handleBlogCreate} />
-      </Togglable>
-
-      {props.blogs.sort(byLikes).map(blog =>
-        <Blog
-          key={blog.id}
-          blog={blog}
-          like={handleBlogLike}
-          remove={handleBlogRemove}
-          user={props.user}
-          creator={blog.user.username === props.user.username}
+        <Route exact path='/'
+          render={() =>
+            <Home
+              handleBlogCreate={handleBlogCreate}
+              handleBlogLike={handleBlogLike}
+              handleBlogRemove={handleBlogRemove}
+            />
+          }
         />
-      )}
-    </div>
+        <Route exact path='/users'
+          render={() => <Users />}
+        />
+      </div>
+    </Router>
   )
 }
 
