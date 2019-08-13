@@ -42,8 +42,8 @@ const Home = (props) => {
           blog={blog}
           like={handleBlogLike}
           remove={handleBlogRemove}
-          user={props.user}
-          creator={blog.user.username === props.user.username}
+          loggedUser={props.loggedUser}
+          creator={blog.user.username === props.loggedUser.username}
         />
       )}
     </div>
@@ -52,7 +52,7 @@ const Home = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    user: state.user,
+    loggedUser: state.loggedUser,
     blogs: state.blogs
   }
 }

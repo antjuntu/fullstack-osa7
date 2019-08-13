@@ -54,7 +54,7 @@ const App = (props) => {
     window.localStorage.removeItem('loggedBlogAppUser')
   }
 
-  if (props.user === null) {
+  if (props.loggedUser === null) {
     return (
       <div>
         <h2>log in to application</h2>
@@ -83,7 +83,7 @@ const App = (props) => {
 
         <Notification />
 
-        <p>{props.user.name} logged in</p>
+        <p>{props.loggedUser.name} logged in</p>
         <button onClick={handleLogout}>logout</button>
 
         <Route exact path='/'
@@ -100,7 +100,7 @@ const App = (props) => {
 const mapStateToProps = (state) => {
   return {
     blogs: state.blogs,
-    user: state.user
+    loggedUser: state.loggedUser
   }
 }
 
