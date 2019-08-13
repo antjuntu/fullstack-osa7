@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 
 import Blog from './components/Blog'
@@ -11,13 +11,12 @@ import { useField } from './hooks'
 import { notify } from './reducers/notificationReducer'
 import { initializeBlogs, createBlog, likeBlog, removeBlog } from './reducers/blogReducer'
 import { toggleVisibility } from './reducers/togglableReducer'
+import { login, logout } from './reducers/userReducer'
 
 const App = (props) => {
   const [username] = useField('text')
   const [password] = useField('password')
-  const [user, setUser] = useState(null)
 
-  // TODO: [props] causes many calls?
   useEffect(() => {
     props.initializeBlogs()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -27,9 +26,10 @@ const App = (props) => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-      setUser(user)
+      props.login(user)
       blogService.setToken(user.token)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleLogin = async (event) => {
@@ -42,14 +42,14 @@ const App = (props) => {
 
       window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(user))
       blogService.setToken(user.token)
-      setUser(user)
+      props.login(user)
     } catch (exception) {
-      notify('wrong username of password', 'error')
+      props.notify('wrong username of password', 'error')
     }
   }
 
   const handleLogout = () => {
-    setUser(null)
+    props.logout()
     blogService.destroyToken()
     window.localStorage.removeItem('loggedBlogAppUser')
   }
@@ -78,7 +78,7 @@ const App = (props) => {
 
   const byLikes = (b1, b2) => b2.likes - b1.likes
 
-  if (user === null) {
+  if (props.user === null) {
     return (
       <div>
         <h2>log in to application</h2>
@@ -106,7 +106,7 @@ const App = (props) => {
 
       <Notification />
 
-      <p>{user.name} logged in</p>
+      <p>{props.user.name} logged in</p>
       <button onClick={handleLogout}>logout</button>
 
       <Togglable buttonLabel='create'>
@@ -119,8 +119,8 @@ const App = (props) => {
           blog={blog}
           like={handleBlogLike}
           remove={handleBlogRemove}
-          user={user}
-          creator={blog.user.username === user.username}
+          user={props.user}
+          creator={blog.user.username === props.user.username}
         />
       )}
     </div>
@@ -129,7 +129,8 @@ const App = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    blogs: state.blogs
+    blogs: state.blogs,
+    user: state.user
   }
 }
 
@@ -141,6 +142,8 @@ export default connect(
     createBlog,
     likeBlog,
     removeBlog,
-    toggleVisibility
+    toggleVisibility,
+    login,
+    logout
   }
 )(App)
