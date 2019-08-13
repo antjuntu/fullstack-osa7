@@ -9,6 +9,18 @@ usersRouter.get('/', async (request, response) => {
   response.json(users.map(u => u.toJSON()))
 })
 
+usersRouter.get('/:id', async (request, response, next) => {
+  try {
+    const user = await User
+      .findById(request.params.id)
+      .populate('blogs', { author: 1, title: 1, url: 1 })
+
+    response.json(user)
+  } catch(exception) {
+    next(exception)
+  }
+})
+
 usersRouter.post('/', async (request, response, next) => {
   try {
     const { username, password, name } = request.body
