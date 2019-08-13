@@ -1,34 +1,35 @@
-import React, { useState, useImperativeHandle } from 'react'
+import React from 'react'
+import { connect } from 'react-redux'
+import { toggleVisibility } from '../reducers/togglableReducer'
 
-const Togglable = React.forwardRef((props, ref) => {
-  const [visible, setVisible] = useState(false)
-
-  const hideWhenVisible = { display: visible ? 'none' : '' }
-  const showWhenVisible = { display: visible ? '' : 'none' }
-
-  const toggleVisibility = () => {
-    setVisible(!visible)
-  }
-
-  useImperativeHandle(ref, () => {
-    return {
-      toggleVisibility
-    }
-  })
+const Togglable = (props) => {
+  const hideWhenVisible = { display: props.visible ? 'none' : '' }
+  const showWhenVisible = { display: props.visible ? '' : 'none' }
 
   return (
     <div>
       <div style={hideWhenVisible}>
-        <button onClick={toggleVisibility}>
+        <button onClick={props.toggleVisibility}>
           {props.buttonLabel}
         </button>
       </div>
       <div style={showWhenVisible}>
         {props.children}
-        <button onClick={toggleVisibility}>cancel</button>
+        <button onClick={props.toggleVisibility}>cancel</button>
       </div>
     </div>
   )
-})
+}
 
-export default Togglable
+const mapStateToProps = (state) => {
+  return {
+    visible: state.visible
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  {
+    toggleVisibility
+  }
+)(Togglable)

@@ -10,6 +10,7 @@ import Togglable from './components/Togglable'
 import { useField } from './hooks'
 import { notify } from './reducers/notificationReducer'
 import { initializeBlogs, createBlog, likeBlog, removeBlog } from './reducers/blogReducer'
+import { toggleVisibility } from './reducers/togglableReducer'
 
 const App = (props) => {
   const [username] = useField('text')
@@ -56,7 +57,7 @@ const App = (props) => {
   // TODO: move down
   const handleBlogCreate = (blog) => {
     props.createBlog(blog)
-    newBlogRef.current.toggleVisibility()
+    props.toggleVisibility()
     props.notify(`a new blog ${blog.title} by ${blog.author} added`)
   }
 
@@ -74,8 +75,6 @@ const App = (props) => {
       props.notify(`blog ${blog.title} by ${blog.author} removed!`)
     }
   }
-
-  const newBlogRef = React.createRef()
 
   const byLikes = (b1, b2) => b2.likes - b1.likes
 
@@ -110,7 +109,7 @@ const App = (props) => {
       <p>{user.name} logged in</p>
       <button onClick={handleLogout}>logout</button>
 
-      <Togglable buttonLabel='create' ref={newBlogRef}>
+      <Togglable buttonLabel='create'>
         <NewBlog handleBlogCreate={handleBlogCreate} />
       </Togglable>
 
@@ -141,6 +140,7 @@ export default connect(
     initializeBlogs,
     createBlog,
     likeBlog,
-    removeBlog
+    removeBlog,
+    toggleVisibility
   }
 )(App)
