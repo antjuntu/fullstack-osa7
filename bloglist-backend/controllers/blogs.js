@@ -10,6 +10,17 @@ router.get('/', async (request, response) => {
   response.json(blogs.map(b => b.toJSON()))
 })
 
+router.get('/:id', async (request, response, next) => {
+  try {
+    const blog = await Blog
+      .findById(request.params.id)
+      .populate('user', { username: 1, name: 1 })
+    response.json(blog)
+  } catch (exception) {
+    next(exception)
+  }
+})
+
 router.post('/', async (request, response, next) => {
   try {
     const blog = new Blog(request.body)
@@ -56,6 +67,7 @@ router.put('/:id', async (request, response) => {
 
   const updatedNote = await Blog
     .findByIdAndUpdate(request.params.id, blog, { new: true })
+    .populate('user', { username: 1, name: 1 })
 
   response.json(updatedNote.toJSON())
 })

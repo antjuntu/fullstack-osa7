@@ -9,12 +9,11 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import { useField } from './hooks'
 import { notify } from './reducers/notificationReducer'
-import { initializeBlogs } from './reducers/blogReducer'
+import { initializeBlogs, createBlog, likeBlog, removeBlog } from './reducers/blogReducer'
 
 const App = (props) => {
   const [username] = useField('text')
   const [password] = useField('password')
-  //const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
 
   // TODO: [props] causes many calls?
@@ -54,28 +53,24 @@ const App = (props) => {
     window.localStorage.removeItem('loggedBlogAppUser')
   }
 
-  // TODO
-  const createBlog = async (blog) => {
-    const createdBlog = await blogService.create(blog)
+  // TODO: move down
+  const handleBlogCreate = (blog) => {
+    props.createBlog(blog)
     newBlogRef.current.toggleVisibility()
-    //setBlogs(blogs.concat(createdBlog))
-    props.notify(`a new blog ${createdBlog.title} by ${createdBlog.author} added`)
+    props.notify(`a new blog ${blog.title} by ${blog.author} added`)
   }
 
-  // TODO
-  const likeBlog = async (blog) => {
-    const likedBlog = { ...blog, likes: blog.likes + 1 }
-    const updatedBlog = await blogService.update(likedBlog)
-    //setBlogs(blogs.map(b => b.id === blog.id ? updatedBlog : b))
-    props.notify(`blog ${updatedBlog.title} by ${updatedBlog.author} liked!`)
+  // TODO: move down
+  const handleBlogLike = (blog) => {
+    props.likeBlog(blog)
+    props.notify(`blog ${blog.title} by ${blog.author} liked!`)
   }
 
-  // TODO
-  const removeBlog = async (blog) => {
+  // TODO: move down
+  const handleBlogRemove = (blog) => {
     const ok = window.confirm(`remove blog ${blog.title} by ${blog.author}`)
     if (ok) {
-      await blogService.remove(blog)
-      //setBlogs(blogs.filter(b => b.id !== blog.id))
+      props.removeBlog(blog)
       props.notify(`blog ${blog.title} by ${blog.author} removed!`)
     }
   }
@@ -116,15 +111,15 @@ const App = (props) => {
       <button onClick={handleLogout}>logout</button>
 
       <Togglable buttonLabel='create' ref={newBlogRef}>
-        <NewBlog createBlog={createBlog} />
+        <NewBlog handleBlogCreate={handleBlogCreate} />
       </Togglable>
 
       {props.blogs.sort(byLikes).map(blog =>
         <Blog
           key={blog.id}
           blog={blog}
-          like={likeBlog}
-          remove={removeBlog}
+          like={handleBlogLike}
+          remove={handleBlogRemove}
           user={user}
           creator={blog.user.username === user.username}
         />
@@ -143,6 +138,9 @@ export default connect(
   mapStateToProps,
   {
     notify,
-    initializeBlogs
+    initializeBlogs,
+    createBlog,
+    likeBlog,
+    removeBlog
   }
 )(App)

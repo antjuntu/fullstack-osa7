@@ -15,6 +15,11 @@ const destroyToken = () => {
   token = null
 }
 
+const get = async (id) => {
+  const response = await axios.get(`${baseUrl}/${id}`)
+  return response.data
+}
+
 const getAll = () => {
   const request = axios.get(baseUrl)
   return request.then(response => response.data)
@@ -35,4 +40,4 @@ const remove = async object => {
   return response.data
 }
 
-export default { getAll, create, update, remove, setToken, destroyToken }
+export default { get, getAll, create, update, remove, setToken, destroyToken }

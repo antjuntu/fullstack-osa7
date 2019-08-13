@@ -8,7 +8,7 @@ const NewBlog = (props) => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    props.createBlog({
+    props.handleBlogCreate({
       title: title.value,
       author: author.value,
       url: url.value
