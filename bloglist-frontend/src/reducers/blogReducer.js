@@ -44,7 +44,7 @@ export const removeBlog = blog => {
 }
 
 const blogReducer = (state = [], action) => {
-  console.log('ACTION:', action)
+  //console.log('ACTION:', action)
   switch (action.type) {
   case 'INIT_BLOGS':
     return action.data
