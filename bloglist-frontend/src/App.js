@@ -11,7 +11,7 @@ import { useField } from './hooks'
 import { notify } from './reducers/notificationReducer'
 import { initializeBlogs, createBlog, likeBlog, removeBlog } from './reducers/blogReducer'
 import { toggleVisibility } from './reducers/togglableReducer'
-import { login, logout } from './reducers/userReducer'
+import { setUser } from './reducers/userReducer'
 
 const App = (props) => {
   const [username] = useField('text')
@@ -26,7 +26,7 @@ const App = (props) => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-      props.login(user)
+      props.setUser(user)
       blogService.setToken(user.token)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -42,14 +42,14 @@ const App = (props) => {
 
       window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(user))
       blogService.setToken(user.token)
-      props.login(user)
+      props.setUser(user)
     } catch (exception) {
       props.notify('wrong username of password', 'error')
     }
   }
 
   const handleLogout = () => {
-    props.logout()
+    props.setUser(null)
     blogService.destroyToken()
     window.localStorage.removeItem('loggedBlogAppUser')
   }
@@ -143,7 +143,6 @@ export default connect(
     likeBlog,
     removeBlog,
     toggleVisibility,
-    login,
-    logout
+    setUser
   }
 )(App)
