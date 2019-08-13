@@ -11,7 +11,4 @@ const getAll = async () => {
   return response.data
 }
 
-export default {
-  get,
-  getAll
-}
+export default { get, getAll }
