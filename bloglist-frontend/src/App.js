@@ -9,7 +9,7 @@ import { useField } from './hooks'
 import { notify } from './reducers/notificationReducer'
 import { initializeBlogs, createBlog, likeBlog, removeBlog } from './reducers/blogReducer'
 import { toggleVisibility } from './reducers/togglableReducer'
-import { setUser } from './reducers/userReducer'
+import { setUser } from './reducers/loginReducer'
 import Home from './components/Home'
 import Users from './components/Users'
 
@@ -54,28 +54,6 @@ const App = (props) => {
     window.localStorage.removeItem('loggedBlogAppUser')
   }
 
-  // TODO: move down
-  const handleBlogCreate = (blog) => {
-    props.createBlog(blog)
-    props.toggleVisibility()
-    props.notify(`a new blog ${blog.title} by ${blog.author} added`)
-  }
-
-  // TODO: move down
-  const handleBlogLike = (blog) => {
-    props.likeBlog(blog)
-    props.notify(`blog ${blog.title} by ${blog.author} liked!`)
-  }
-
-  // TODO: move down
-  const handleBlogRemove = (blog) => {
-    const ok = window.confirm(`remove blog ${blog.title} by ${blog.author}`)
-    if (ok) {
-      props.removeBlog(blog)
-      props.notify(`blog ${blog.title} by ${blog.author} removed!`)
-    }
-  }
-
   if (props.user === null) {
     return (
       <div>
@@ -109,13 +87,7 @@ const App = (props) => {
         <button onClick={handleLogout}>logout</button>
 
         <Route exact path='/'
-          render={() =>
-            <Home
-              handleBlogCreate={handleBlogCreate}
-              handleBlogLike={handleBlogLike}
-              handleBlogRemove={handleBlogRemove}
-            />
-          }
+          render={() => <Home />}
         />
         <Route exact path='/users'
           render={() => <Users />}
