@@ -12,6 +12,7 @@ import { toggleVisibility } from './reducers/togglableReducer'
 import { setUser } from './reducers/loginReducer'
 import Home from './components/Home'
 import Users from './components/Users'
+import User from './components/User'
 
 const App = (props) => {
   const [username] = useField('text')
@@ -91,6 +92,9 @@ const App = (props) => {
         />
         <Route exact path='/users'
           render={() => <Users />}
+        />
+        <Route exact path='/users/:id'
+          render={({ match }) => <User id={match.params.id} />}
         />
       </div>
     </Router>
