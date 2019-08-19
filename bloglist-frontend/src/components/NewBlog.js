@@ -1,18 +1,31 @@
 import React from 'react'
 import { useField } from '../hooks'
+import { connect } from 'react-redux'
+import { createBlog } from '../reducers/blogReducer'
+import { toggleVisibility } from '../reducers/togglableReducer'
+import { notify } from '../reducers/notificationReducer'
 
 const NewBlog = (props) => {
   const [title, titleReset] = useField('text')
   const [author, authorReset] = useField('text')
   const [url, urlReset] = useField('text')
 
+  // const handleBlogCreate = (blog) => {
+  //   props.createBlog(blog)
+  //   props.toggleVisibility()
+  //   props.notify(`a new blog ${blog.title} by ${blog.author} added`)
+  // }
+
   const handleSubmit = (event) => {
     event.preventDefault()
-    props.handleBlogCreate({
+    const blog = {
       title: title.value,
       author: author.value,
       url: url.value
-    })
+    }
+    props.createBlog(blog)
+    props.toggleVisibility()
+    props.notify(`a new blog ${blog.title} by ${blog.author} added`)
     titleReset()
     authorReset()
     urlReset()
@@ -41,4 +54,11 @@ const NewBlog = (props) => {
   )
 }
 
-export default NewBlog
+export default connect(
+  null,
+  {
+    createBlog,
+    toggleVisibility,
+    notify
+  }
+)(NewBlog)

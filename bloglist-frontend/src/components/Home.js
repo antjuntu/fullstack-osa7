@@ -3,19 +3,13 @@ import { connect } from 'react-redux'
 import Togglable from './Togglable'
 import Blog from './Blog'
 import NewBlog from './NewBlog'
-import { createBlog, likeBlog, removeBlog } from '../reducers/blogReducer'
+import { likeBlog, removeBlog } from '../reducers/blogReducer'
 import { toggleVisibility } from '../reducers/togglableReducer'
 import { notify } from '../reducers/notificationReducer'
 
 const Home = (props) => {
 
   const byLikes = (b1, b2) => b2.likes - b1.likes
-
-  const handleBlogCreate = (blog) => {
-    props.createBlog(blog)
-    props.toggleVisibility()
-    props.notify(`a new blog ${blog.title} by ${blog.author} added`)
-  }
 
   const handleBlogLike = (blog) => {
     props.likeBlog(blog)
@@ -33,7 +27,7 @@ const Home = (props) => {
   return (
     <div>
       <Togglable buttonLabel='create'>
-        <NewBlog handleBlogCreate={handleBlogCreate} />
+        <NewBlog />
       </Togglable>
 
       {props.blogs.sort(byLikes).map(blog =>
@@ -60,7 +54,6 @@ const mapStateToProps = (state) => {
 export default connect(
   mapStateToProps,
   {
-    createBlog,
     likeBlog,
     removeBlog,
     toggleVisibility,
