@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -61,6 +61,8 @@ const App = (props) => {
     return blog
   }
 
+  const padding = { padding: 5 }
+
   if (props.loggedUser === null) {
     return (
       <div>
@@ -86,12 +88,15 @@ const App = (props) => {
   return (
     <Router>
       <div>
-        <h2>blogs</h2>
+        <div>
+          <Link style={padding} to='/'>blogs</Link>
+          <Link style={padding} to='/users'>users</Link>
+          <em>{props.loggedUser.name} logged in </em>
+          <button onClick={handleLogout}>logout</button>
+        </div>
+        <h1>Blogs</h1>
 
         <Notification />
-
-        <p>{props.loggedUser.name} logged in</p>
-        <button onClick={handleLogout}>logout</button>
 
         <Route exact path='/'
           render={() => <Home />}
