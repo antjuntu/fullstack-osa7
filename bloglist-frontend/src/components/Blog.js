@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 import { likeBlog, removeBlog } from '../reducers/blogReducer'
 import { notify } from '../reducers/notificationReducer'
 
@@ -16,16 +17,17 @@ const Blog = (props) => {
     const ok = window.confirm(`remove blog ${blog.title} by ${blog.author}`)
     if (ok) {
       props.removeBlog(blog)
+      props.history.push('/')
       props.notify(`blog ${blog.title} by ${blog.author} removed!`)
     }
   }
 
   const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5
+    marginTop: 10
+  }
+
+  if  (blog === undefined) {
+    return null
   }
 
   const creator = blog.user.username === props.loggedUser.username
@@ -48,7 +50,7 @@ const Blog = (props) => {
 
 
 Blog.propTypes = {
-  blog: PropTypes.object.isRequired
+  blog: PropTypes.object
 }
 
 
@@ -57,7 +59,7 @@ const mapStateToProps = (state) => {
     loggedUser: state.loggedUser
   }
 }
-export default connect(
+const connectedBlog = connect(
   mapStateToProps,
   {
     likeBlog,
@@ -65,3 +67,5 @@ export default connect(
     notify
   }
 )(Blog)
+
+export default withRouter(connectedBlog)

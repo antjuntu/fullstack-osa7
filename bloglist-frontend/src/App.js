@@ -13,6 +13,7 @@ import { setUser } from './reducers/loginReducer'
 import Home from './components/Home'
 import Users from './components/Users'
 import User from './components/User'
+import Blog from './components/Blog'
 
 const App = (props) => {
   const [username] = useField('text')
@@ -55,6 +56,11 @@ const App = (props) => {
     window.localStorage.removeItem('loggedBlogAppUser')
   }
 
+  const getBlogById = (id) => {
+    const blog = props.blogs.find(b => b.id === id)
+    return blog
+  }
+
   if (props.loggedUser === null) {
     return (
       <div>
@@ -95,6 +101,9 @@ const App = (props) => {
         />
         <Route exact path='/users/:id'
           render={({ match }) => <User id={match.params.id} />}
+        />
+        <Route path='/blogs/:id'
+          render={({ match }) => <Blog blog={getBlogById(match.params.id)} />}
         />
       </div>
     </Router>
