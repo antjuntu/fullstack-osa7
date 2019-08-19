@@ -1,8 +1,24 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { likeBlog, removeBlog } from '../reducers/blogReducer'
+import { notify } from '../reducers/notificationReducer'
 
-const Blog = ({ blog, like, remove, creator }) => {
-  const [expanded, setExpanded] = useState(false)
+const Blog = (props) => {
+  const blog = props.blog
+
+  const like = (blog) => {
+    props.likeBlog(blog)
+    props.notify(`blog ${blog.title} by ${blog.author} liked!`)
+  }
+
+  const remove = (blog) => {
+    const ok = window.confirm(`remove blog ${blog.title} by ${blog.author}`)
+    if (ok) {
+      props.removeBlog(blog)
+      props.notify(`blog ${blog.title} by ${blog.author} removed!`)
+    }
+  }
 
   const blogStyle = {
     paddingTop: 10,
@@ -12,32 +28,40 @@ const Blog = ({ blog, like, remove, creator }) => {
     marginBottom: 5
   }
 
-  const details = () => (
-    <div className='details'>
-      <a href={blog.url}>{blog.url}</a>
-      <div>{blog.likes} likes
-        <button onClick={() => like(blog)}>like</button>
-      </div>
-      <div>added by {blog.user.name}</div>
-      {creator &&(<button onClick={() => remove(blog)}>remove </button>)}
-    </div>
-  )
+  const creator = blog.user.username === props.loggedUser.username
 
   return (
     <div style={blogStyle}>
-      <div onClick={() => setExpanded(!expanded)} className='name'>
+      <h2 className='name'>
         {blog.title} {blog.author}
+      </h2>
+      <div className='details'>
+        <a href={blog.url}>{blog.url}</a>
+        <div>{blog.likes} likes
+          <button onClick={() => like(blog)}>like</button>
+        </div>
+        <div>added by {blog.user.name}</div>
+        {creator &&(<button onClick={() => remove(blog)}>remove </button>)}
       </div>
-      {expanded && details()}
     </div>
   )}
 
 
 Blog.propTypes = {
-  blog: PropTypes.object.isRequired,
-  like: PropTypes.func.isRequired,
-  remove: PropTypes.func.isRequired,
-  creator: PropTypes.bool.isRequired
+  blog: PropTypes.object.isRequired
 }
 
-export default Blog
+
+const mapStateToProps = (state) => {
+  return {
+    loggedUser: state.loggedUser
+  }
+}
+export default connect(
+  mapStateToProps,
+  {
+    likeBlog,
+    removeBlog,
+    notify
+  }
+)(Blog)
