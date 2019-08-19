@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import { Container } from 'semantic-ui-react'
-import { Form, Button } from 'semantic-ui-react'
+import { Form, Button, Menu } from 'semantic-ui-react'
 
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -63,8 +63,6 @@ const App = (props) => {
     return blog
   }
 
-  const padding = { padding: 5 }
-
   if (props.loggedUser === null) {
     return (
       <Container>
@@ -91,12 +89,21 @@ const App = (props) => {
     <Container>
       <Router>
         <div>
-          <div>
-            <Link style={padding} to='/'>blogs</Link>
-            <Link style={padding} to='/users'>users</Link>
-            <em>{props.loggedUser.name} logged in </em>
-            <button onClick={handleLogout}>logout</button>
-          </div>
+          <Menu inverted>
+            <Menu.Item link>
+              <Link to='/'>blogs</Link>
+            </Menu.Item>
+            <Menu.Item link>
+              <Link to='/users'>users</Link>
+            </Menu.Item>
+            <Menu.Item>
+              {props.loggedUser.name} logged in
+            </Menu.Item>
+            <Menu.Item onClick={handleLogout}>
+              logout
+            </Menu.Item>
+          </Menu>
+
           <h1>Blog App</h1>
 
           <Notification />
