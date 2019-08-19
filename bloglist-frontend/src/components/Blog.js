@@ -45,6 +45,10 @@ const Blog = (props) => {
         <div>added by {blog.user.name}</div>
         {creator &&(<button onClick={() => remove(blog)}>remove </button>)}
       </div>
+      <h3>comments</h3>
+      <ul>
+        {blog.comments.map(b => <li key={b}>{b}</li>)}
+      </ul>
     </div>
   )}
 

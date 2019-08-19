@@ -58,6 +58,28 @@ router.post('/', async (request, response, next) => {
   }
 })
 
+router.post('/:id/comments', async (request, response, next) => {
+  try {
+    const content = request.body.content
+
+    if (!content) {
+      return response.status(400).send({ error: 'content missing' })
+    }
+
+    const blog = await Blog.findById(request.params.id)
+    if (!blog) {
+      return response.status(400).send({ error: 'blog not found' })
+    }
+    blog.comments = blog.comments.concat(content)
+
+    const result = await blog.save()
+
+    response.status(201).json(result)
+  } catch (exception) {
+    next(exception)
+  }
+})
+
 router.put('/:id', async (request, response) => {
   const { author, title, url,likes } = request.body
 
