@@ -9,7 +9,6 @@ const Users = (props) => {
     props.initializeUsers()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
   return (
     <div>
       <h2>Users</h2>
