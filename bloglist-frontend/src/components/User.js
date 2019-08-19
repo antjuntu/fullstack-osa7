@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { List } from 'semantic-ui-react'
 
 const User = (props) => {
   if (props.user === undefined) {
@@ -11,10 +12,12 @@ const User = (props) => {
       <h2>{props.user.name}</h2>
 
       <h3>added blogs</h3>
-      {props.user.blogs.length === 0 && <div>no blogs added</div>}
-      <ul>
-        {props.user.blogs.map(b => <li key={b.id}>{b.title}</li>)}
-      </ul>
+
+      <List bulleted>
+        {props.user.blogs.map(b =>
+          <List.Item key={b.id}>{b.title}</List.Item>
+        )}
+      </List>
     </div>
   )
 }

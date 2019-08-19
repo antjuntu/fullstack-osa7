@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import { Container } from 'semantic-ui-react'
+import { Form, Button } from 'semantic-ui-react'
 
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -65,53 +67,55 @@ const App = (props) => {
 
   if (props.loggedUser === null) {
     return (
-      <div>
+      <Container>
         <h2>log in to application</h2>
 
         <Notification />
 
-        <form onSubmit={handleLogin}>
-          <div>
-            username
+        <Form onSubmit={handleLogin}>
+          <Form.Field>
+            <label>username</label>
             <input {...username}/>
-          </div>
-          <div>
-            password
+          </Form.Field>
+          <Form.Field>
+            <label>password</label>
             <input {...password} />
-          </div>
-          <button type="submit">login</button>
-        </form>
-      </div>
+          </Form.Field>
+          <Button type="submit">login</Button>
+        </Form>
+      </Container>
     )
   }
 
   return (
-    <Router>
-      <div>
+    <Container>
+      <Router>
         <div>
-          <Link style={padding} to='/'>blogs</Link>
-          <Link style={padding} to='/users'>users</Link>
-          <em>{props.loggedUser.name} logged in </em>
-          <button onClick={handleLogout}>logout</button>
+          <div>
+            <Link style={padding} to='/'>blogs</Link>
+            <Link style={padding} to='/users'>users</Link>
+            <em>{props.loggedUser.name} logged in </em>
+            <button onClick={handleLogout}>logout</button>
+          </div>
+          <h1>Blog App</h1>
+
+          <Notification />
+
+          <Route exact path='/'
+            render={() => <Home />}
+          />
+          <Route exact path='/users'
+            render={() => <Users />}
+          />
+          <Route exact path='/users/:id'
+            render={({ match }) => <User id={match.params.id} />}
+          />
+          <Route path='/blogs/:id'
+            render={({ match }) => <Blog blog={getBlogById(match.params.id)} />}
+          />
         </div>
-        <h1>Blog App</h1>
-
-        <Notification />
-
-        <Route exact path='/'
-          render={() => <Home />}
-        />
-        <Route exact path='/users'
-          render={() => <Users />}
-        />
-        <Route exact path='/users/:id'
-          render={({ match }) => <User id={match.params.id} />}
-        />
-        <Route path='/blogs/:id'
-          render={({ match }) => <Blog blog={getBlogById(match.params.id)} />}
-        />
-      </div>
-    </Router>
+      </Router>
+    </Container>
   )
 }
 

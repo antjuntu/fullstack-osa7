@@ -1,5 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Button } from 'semantic-ui-react'
+
 import { toggleVisibility } from '../reducers/togglableReducer'
 
 const Togglable = (props) => {
@@ -9,13 +11,13 @@ const Togglable = (props) => {
   return (
     <div>
       <div style={hideWhenVisible}>
-        <button onClick={props.toggleVisibility}>
+        <Button basic color='grey' onClick={props.toggleVisibility}>
           {props.buttonLabel}
-        </button>
+        </Button>
       </div>
       <div style={showWhenVisible}>
         {props.children}
-        <button onClick={props.toggleVisibility}>cancel</button>
+        <Button basic onClick={props.toggleVisibility}>cancel</Button>
       </div>
     </div>
   )

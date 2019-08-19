@@ -1,6 +1,8 @@
 import React from 'react'
 import { useField } from '../hooks'
 import { connect } from 'react-redux'
+import { Form, Button } from 'semantic-ui-react'
+
 import { createBlog } from '../reducers/blogReducer'
 import { toggleVisibility } from '../reducers/togglableReducer'
 import { notify } from '../reducers/notificationReducer'
@@ -29,21 +31,21 @@ const NewBlog = (props) => {
     <div>
       <h2>create new</h2>
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          title:
+      <Form onSubmit={handleSubmit}>
+        <Form.Field>
+          <label>title</label>
           <input {...title} />
-        </div>
-        <div>
-          author:
+        </Form.Field>
+        <Form.Field>
+          <label>author</label>
           <input {...author} />
-        </div>
-        <div>
-          url:
+        </Form.Field>
+        <Form.Field>
+          <label>url</label>
           <input {...url} />
-        </div>
-        <button type='submit'>create</button>
-      </form>
+        </Form.Field>
+        <Button basic color='grey' type='submit'>create</Button>
+      </Form>
     </div>
   )
 }
