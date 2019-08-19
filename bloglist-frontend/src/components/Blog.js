@@ -29,7 +29,7 @@ const Blog = (props) => {
   const addComment = () => {
     // Reload page so that a new comment is visible immediately
     //event.preventDefault()
-    //console.log('add comment', blog.id, comment)
+    console.log('add comment', blog.id, comment)
     props.commentBlog(blog.id, comment)
     setComment('')
   }
@@ -52,16 +52,16 @@ const Blog = (props) => {
       <div className='details'>
         <a href={blog.url}>{blog.url}</a>
         <div>{blog.likes} likes
-          <button onClick={() => like(blog)}>like</button>
+          <Button basic color='grey' onClick={() => like(blog)}>like</Button>
         </div>
         <div>added by {blog.user.name}</div>
-        {creator &&(<button onClick={() => remove(blog)}>remove </button>)}
+        {creator &&(<Button basic color='grey' onClick={() => remove(blog)}>remove </Button>)}
       </div>
       <h3>comments</h3>
       <Form onSubmit={addComment}>
         <Form.Field>
           <input value={comment} onChange={(event) => setComment(event.target.value)} />
-          <Button basic type='submit'>add comment</Button>
+          <Button basic color='grey' type='submit'>add comment</Button>
         </Form.Field>
       </Form>
       <List bulleted>
