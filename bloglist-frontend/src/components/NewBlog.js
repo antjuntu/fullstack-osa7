@@ -10,12 +10,6 @@ const NewBlog = (props) => {
   const [author, authorReset] = useField('text')
   const [url, urlReset] = useField('text')
 
-  // const handleBlogCreate = (blog) => {
-  //   props.createBlog(blog)
-  //   props.toggleVisibility()
-  //   props.notify(`a new blog ${blog.title} by ${blog.author} added`)
-  // }
-
   const handleSubmit = (event) => {
     event.preventDefault()
     const blog = {

@@ -94,7 +94,7 @@ const App = (props) => {
           <em>{props.loggedUser.name} logged in </em>
           <button onClick={handleLogout}>logout</button>
         </div>
-        <h1>Blogs</h1>
+        <h1>Blog App</h1>
 
         <Notification />
 
