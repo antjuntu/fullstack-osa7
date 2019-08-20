@@ -1,25 +1,33 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Message } from 'semantic-ui-react'
 
 const Notification = ({ notification }) => {
   if (notification.message === null) {
     return null
   }
 
-  const style = {
-    color: notification.type === 'error' ? 'red' : 'green',
-    background: 'lightgrey',
-    fontSize: 20,
-    borderStyle: 'solid',
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 10,
+  // const style = {
+  //   color: notification.type === 'error' ? 'red' : 'green',
+  //   background: 'lightgrey',
+  //   fontSize: 20,
+  //   borderStyle: 'solid',
+  //   borderRadius: 5,
+  //   padding: 10,
+  //   marginBottom: 10,
+  // }
+  if (notification.type === 'error') {
+    return (
+      <Message error>
+        {notification.message}
+      </Message>
+    )
   }
 
   return (
-    <div style={style}>
+    <Message success>
       {notification.message}
-    </div>
+    </Message>
   )
 }
 

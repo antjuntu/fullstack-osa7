@@ -48,7 +48,7 @@ const App = (props) => {
       blogService.setToken(user.token)
       props.setUser(user)
     } catch (exception) {
-      props.notify('wrong username of password', 'error')
+      props.notify('wrong username or password', 'error')
     }
   }
 
