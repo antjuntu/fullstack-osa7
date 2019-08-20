@@ -26,10 +26,9 @@ const Blog = (props) => {
     }
   }
 
-  const addComment = () => {
-    // Reload page so that a new comment is visible immediately
-    //event.preventDefault()
-    console.log('add comment', blog.id, comment)
+  const addComment = (event) => {
+    event.preventDefault()
+    //console.log('add comment', blog.id, comment)
     props.commentBlog(blog.id, comment)
     setComment('')
   }
