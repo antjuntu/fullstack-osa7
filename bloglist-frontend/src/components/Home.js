@@ -12,7 +12,7 @@ const Home = (props) => {
 
   return (
     <div>
-      <Togglable buttonLabel='create'>
+      <Togglable buttonLabel='new blog'>
         <NewBlog />
       </Togglable>
       <Table celled>
